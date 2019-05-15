@@ -62,12 +62,12 @@ var polygon = L.polygon(latlngs, {color: 'black', opacity: 1, weight: 3, fillOpa
 	
 	/* Base Maps */
 
-/*	function onEachFeature(feature, layer) {
+	function onEachFeature(feature, layer) {
 		var popupContent = feature.properties.popupContent;
 		layer.bindPopup(popupContent);
 	}
 		
-var contenedores = L.geoJSON(conte, {
+/*var contenedores = L.geoJSON(conte, {
 
 		pointToLayer: function (feature, latlng) {
 			return L.marker(latlng, {icon: vIcon});
