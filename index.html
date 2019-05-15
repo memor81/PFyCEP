@@ -2,31 +2,27 @@
 <head>
 	<meta charset=utf-8 />
 	<title>PFyCEP</title>
-	<!--Leaflet 1.0.2-->
 	<link rel="stylesheet" href="js/leaflet.css" />
 	 <link rel="stylesheet" href="css/museo-slab.css" />
 	<script src="js/leaflet.js"></script>
-	<!--Plugin Proj4Leaflet-->
 	<script src="js/proj4-compressed.js"></script>
     <script src="js/leaflet-color-markers.js"></script>
     <script src="js/proj4leaflet.js"></script>
     	
 	<style> 
-
  	 #map {
   		 position: absolute;
 		 width: 1100px;
 		 height: 650px; }
 
  	</style> 
-	
 </head>  
 <body>
 <div id ="map" style="margin-top: 15px"> </div>
-/*<script src="zona/C1.js" type="text/javascript"></script>
+<script src="C1.js" type="text/javascript"></script>
 <script src="equipamiento/contC.js" type="text/javascript"></script>
 <script src="equipamiento/centrosC.js" type="text/javascript"></script>
-<script src="equipamiento/islasC.js" type="text/javascript"></script>*/
+<script src="equipamiento/islasC.js" type="text/javascript"></script>
 <script>
 		
 		// Obtención del CRS EPSG:25830.
@@ -66,7 +62,7 @@ var polygon = L.polygon(latlngs, {color: 'black', opacity: 1, weight: 3, fillOpa
 	
 	/* Base Maps */
 
-/*	function onEachFeature(feature, layer) {
+	function onEachFeature(feature, layer) {
 		var popupContent = feature.properties.popupContent;
 		layer.bindPopup(popupContent);
 	}
@@ -135,7 +131,7 @@ L.geoJSON([Vecino], {
 				fillOpacity: 0.8
 			});
 		}
-	}).addTo(map); */
+	}).addTo(map); 
 	
 </script>
 </body>
