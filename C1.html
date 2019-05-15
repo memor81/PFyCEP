@@ -1,0 +1,158 @@
+<!DOCTYPE html><html>
+<head>
+	<meta charset=utf-8 />
+	<title>PFyCEP</title>
+	<!--Leaflet 1.0.2-->
+	<link rel="stylesheet" href="js/leaflet.css" />
+	 <link rel="stylesheet" href="css/museo-slab.css" />
+	<script src="js/leaflet.js"></script>
+	<!--Plugin Proj4Leaflet-->
+	<script src="js/proj4-compressed.js"></script>
+    <script src="js/leaflet-color-markers.js"></script>
+    <script src="js/proj4leaflet.js"></script>
+    	
+	<style> 
+
+ 	 #map {
+  		 position: absolute;
+		 width: 1100px;
+		 height: 650px; }
+
+ 	</style> 
+	
+</head>  
+<body>
+<table width="99%" border="0">
+  <tbody>
+    <tr>
+      <td width="20"><img src="images/verde.png" width="13"/></td>
+      <td width="130" class="leaflet-atexto">Contenedor Verde</td>
+      <td width="20"><img src="images/naranja.png" width="11"/></td>
+      <td width="140" class="leaflet-atexto">Contenedor Naranja</td>
+      <td width="20"><img src="images/centros.png" width="11"/></td>
+      <td width="150" class="leaflet-atexto">Centro de Recepción</td>
+      <td width="20"><img src="images/comercio.png" width="12"/></td>
+      <td width="75" class="leaflet-atexto">Comercio</td>
+      <td width="20"><img src="images/vecino.png" width="12"/></td>
+      <td width="75" class="leaflet-atexto">Vecino</td>
+      <td align="right" class="leaflet-atitulo"><strong>C1 - Centro</strong></td>
+    </tr>
+  </tbody>
+</table>
+<div id ="map" style="margin-top: 15px"> </div>
+<script src="zona/C1.js" type="text/javascript"></script>
+<script src="equipamiento/contC.js" type="text/javascript"></script>
+<script src="equipamiento/centrosC.js" type="text/javascript"></script>
+<script src="equipamiento/islasC.js" type="text/javascript"></script>
+<script>
+		
+		// Obtención del CRS EPSG:25830.
+        var crs = new L.Proj.CRS('EPSG:22185', '+proj=tmerc +lat_0=-90 +lon_0=-60 +k=1 +x_0=5500000 +y_0=0 +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs', //http://spatialreference.org/ref/epsg/25830/proj4/
+            {
+                resolutions: [2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5],
+				//Origen de servicio tileado
+			origin: [0, 0]
+		//		origin:[0,0]
+            });
+		
+		var map = new L.map('map',
+            {
+                crs: crs,
+                minZoom: 0,
+                maxZoom: 12,
+                center: [-32.9464, -60.640],
+                zoomSnap: 0.25,
+                zoom: 8.5
+            });
+
+        var layerRasterIgn = new L.tileLayer.wms("https://infomapa.rosario.gob.ar/wms/planobase?",
+            {	 layers:'distritos_descentralizados,rural_metropolitana,manzanas_metropolitana,limites_metropolitana,limite_municipio,sin_manzanas,manzanas,manzanas_no_regularizada,espacios_verdes,canteros,av_circunvalacion,avenidas_y_boulevares,sentidos_de_calle,via_ferroviaria,puentes,hidrografia,islas_del_parana,bancos_de_arena,autopistas,nombres_de_calles,numeracion_de_calles',
+                crs: crs,
+                format: 'image/jpeg', 
+						map_imagetype: 'jpeg',
+			            transparent: true,
+			            continuousWorld: true,
+			            showOnSelector: false,
+			            maxZoom: 23,
+		                minZoom: 0,
+		                attributions: '© Municipalidad de Rosario'
+            }).addTo(map);	
+var latlngs = [[-32.9546162244, -60.6560560857], [-32.9319875503, -60.650452455], [-32.932522929, -60.6480254048], [-32.9373056456, -60.6401017996], [-32.937555489, -60.6388168907], [-32.9386262465, -60.6373892141], [-32.9397683877, -60.6364969162], [-32.9407677614, -60.6351763154], [-32.9433375793, -60.6339984822], [-32.9465855435, -60.6308575936], [-32.9478704525, -60.6289302302], [-32.9521534823, -60.6272884021], [-32.9541879214, -60.6239333621], [-32.9600770874, -60.6254681144]];
+var polygon = L.polygon(latlngs, {color: 'black', opacity: 1, weight: 3, fillOpacity: 0}).addTo(map);
+	
+	/* Base Maps */
+
+	function onEachFeature(feature, layer) {
+		var popupContent = feature.properties.popupContent;
+		layer.bindPopup(popupContent);
+	}
+		
+var contenedores = L.geoJSON(conte, {
+
+		pointToLayer: function (feature, latlng) {
+			return L.marker(latlng, {icon: vIcon});
+		},
+		onEachFeature: onEachFeature
+	}).addTo(map);
+		
+var islas = L.geoJSON(isla, {
+
+		pointToLayer: function (feature, latlng) {
+			return L.marker(latlng, {icon: nIcon});
+		},
+
+		onEachFeature: onEachFeature
+	}).addTo(map);
+
+var centros = L.geoJSON(centro, {
+
+		pointToLayer: function (feature, latlng) {
+			return L.marker(latlng, {icon: cIcon});
+		},
+
+		onEachFeature: onEachFeature
+	}).addTo(map);
+
+L.geoJSON([Comercio], {
+
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		},
+
+		onEachFeature: onEachFeature,
+
+		pointToLayer: function (feature, latlng) {
+			return L.circleMarker(latlng, {
+				radius: 4,
+				fillColor: "#222222",
+				color: "#000",
+				weight: 1,
+				opacity: 1,
+				fillOpacity: 0.8
+			});
+		}
+	}).addTo(map);
+	
+L.geoJSON([Vecino], {
+
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		},
+
+		onEachFeature: onEachFeature,
+
+		pointToLayer: function (feature, latlng) {
+			return L.circleMarker(latlng, {
+				radius: 4,
+				fillColor: "#54F2FF",
+				color: "#000",
+				weight: 1,
+				opacity: 1,
+				fillOpacity: 0.8
+			});
+		}
+	}).addTo(map); 
+	
+</script>
+</body>
+</html> 
